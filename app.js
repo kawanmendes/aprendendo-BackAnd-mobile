@@ -8,8 +8,9 @@ app.get('/', (_req, res) => {
     res.json({
         message : 'MeetStrager API ',
         version:  '1.0.0',
-        status : 'running',
-       
+        status : ' running',
+        author : 'kawan mendes',
+        description : 'api is so tuff'       
     });
 });
 app.listen(port, () => {
