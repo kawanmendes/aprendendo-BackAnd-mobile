@@ -23,6 +23,22 @@ class AuthService {
         const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '8h' });
         return { user : { id: userId, username, email }, token };
     }
+    async login(email, password) {
+        const user = await Database.get('SELECT * FROM users WHERE email = $1', [email]);
+        if (!user) {
+            throw new Error('Missing email or password');
+        }
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+            throw new Error('Missing/invalid email or password');
+        }
+        await database.run('UPDATE users SET last_login = NOW(), is_online = TRUE WHERE id = $1', [user.id]);
+        const token = jwt.sign(
+            { userId: user.id }, 
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN });
 
-}
+        return {token, user: { id: user.id, username: user.username, email: user.email }, };
+    }
+};
 module.exports = new AuthService();
