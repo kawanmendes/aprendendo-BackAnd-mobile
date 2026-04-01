@@ -9,7 +9,7 @@ app.get('/', (_req, res) => {
         message : 'MeetStrager API ',
         version:  '1.0.0',
         status : ' running',
-        author : 'kawan mendes',
+        author : 'kawan Mendes',
         description : 'api is so tuff'       
     });
 });

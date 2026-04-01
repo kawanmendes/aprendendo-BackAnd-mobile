@@ -40,5 +40,14 @@ class AuthService {
 
         return {token, user: { id: user.id, username: user.username, email: user.email }, };
     }
+
+    async getProfile(userId) {  
+        const user = await Database.get('SELECT id, username, email FROM users WHERE id = $1', [userId]);
+        return await user;
+    }
+    async setUserOnlineStatus(userId, isOnline) {
+        await database.run('UPDATE users SET is_online = $1 WHERE id = $2', [isOnline, userId]);
+        return { message: `User ${isOnline ? 'online' : 'offline'} status updated successfully` };
+    }
 };
 module.exports = new AuthService();
