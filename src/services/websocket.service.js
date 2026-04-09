@@ -116,6 +116,59 @@ class WebSocketService {
             }});
         });
         setInterval(() => { matchingService.cleanupQueues(); }, 5 * 60 * 1000);
-    }    
+    }
+    handleLeaveRoom(socket, roomId, isDisconnect = false) {
+        const targetRoom = roomId || socket.currentRoom;
+        if (targetRoom) {
+            const roomData = matchingService.getRoom(targetRoom);
+            console.log(`Notifying pantner about leaving room ${targetRoom}`);
+            socket.to(targetRoom).emit('partner_left', {
+                roomId: targetRoom,
+                message: isDisconnect ? 'Your partner has disconnected' : 'Your partner has left the room'
+            });
+            if (roomData && roomData.partnerSocketID) {
+                const partnerSocket = this.io.sockets.sockets.get(roomData.partnerSocketID);
+                if (partnerSocket) {
+                    console.log(`auto-reconnecting partner ${roomData.partnerId}`);
+                    partnerSocket.currentRoom = null;
+                    partnerSocket.emit('partner_disconnected', {
+                        message: 'procurando novo parceiro...'
+                    });
+                    setTimeout(() => {
+                        console.log(`starting new search for partner ${roomData.category}`);
+                        const result = matchingService.joinQueue(roomData.partnerId, roomData.partnerSocketID, roomData.category);
+                        if (result.matched) {
+                            const newPartnerSocket = this.io.sockets.sockets.get(result.partnerSocketID);
+                            partnerSocket.emit('match-found', {
+                                roomId: result.roomId,
+                                category: result.category,
+                                partner: {username : 'Usuario'}
+                            });
+                            if (newPartnerSocket) {
+                                newPartnerSocket.emit('match-found', {
+                                    roomId: result.roomId,
+                                    category: result.category,
+                                    partner: {username : 'Usurio'}
+                                });
+                            }
+                        } else {
+                            partnerSocket.emit('queue-status', {
+                                category: result.category,
+                                position: result.position,
+                                estimatedWait: result.estimatedWait
+                            });
+                        }
+                    }, 1000);
+                }
+            }
+        }
+        socket.leave(targetRoom);
+        socket.currentRoom = null;
+    }  
+    getConnectedUsers() {
+        return Array.from(this.connectedUsers.values());
+    }
 }
+
+
 module.exports = new WebSocketService();

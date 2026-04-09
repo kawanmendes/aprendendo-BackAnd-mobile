@@ -91,5 +91,27 @@ class MatchingService {
         if (estimatedWaitTime < 60) {
             return `${estimatedWaitTime} seconds`;
         }else {
+            const minutes = Math.floor(estimatedWaitTime / 60);
+            const seconds = estimatedWaitTime % 60;
+            return `${minutes} minutes ${seconds} seconds`;
+        }
     }
-};    
+    getqueueStatus() {
+        return {
+            games: waitingQueue.games.length,
+            series: waitingQueue.series.length,
+            movies: waitingQueue.movies.length,
+            activeRooms: activeRooms.size
+        }
+    }cleanupInactiveRooms() {
+        const now = new Date();
+        const timeout = 5 * 60 * 1000; //5 minutes
+        activeRooms.forEach((room, roomId) => {
+            if (now - room.createdAt > timeout) {
+                activeRooms.delete(roomId);
+                console.log(`Room ${roomId} has been removed due to inactivity.`);
+            }
+        });
+    }
+}
+module.exports = new MatchingService();
