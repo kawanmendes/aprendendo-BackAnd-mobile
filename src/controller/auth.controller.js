@@ -39,4 +39,4 @@ const AuthController = {
         }
     }
 };
-module.exports = new AuthController();    
+module.exports = AuthController;

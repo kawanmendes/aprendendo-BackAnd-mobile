@@ -115,7 +115,7 @@ class WebSocketService {
                     this.handleLeaveRoom(socket, socket.currentRoom, true);
             }});
         });
-        setInterval(() => { matchingService.cleanupQueues(); }, 5 * 60 * 1000);
+        setInterval(() => { matchingService.cleanupInactiveRooms(); }, 5 * 60 * 1000);
     }
     handleLeaveRoom(socket, roomId, isDisconnect = false) {
         const targetRoom = roomId || socket.currentRoom;

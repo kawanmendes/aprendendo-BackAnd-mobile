@@ -44,3 +44,5 @@ class matchingController {
         }
     }        
 }
+
+module.exports = new matchingController();

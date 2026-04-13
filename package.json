@@ -1,5 +1,5 @@
 {
-  "name": "meetstreenger-backand-app",
+  "name": "meetstranger-backend-app",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,9 +13,23 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "cords": "^1.0.4",
+    "axios": "^1.15.0",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
     "express": "^5.2.1",
-    "nodemon": "^3.1.14"
+    "express-rate-limit": "^8.3.2",
+    "helmet": "^8.1.0",
+    "joi": "^18.1.2",
+    "jsonwebtoken": "^9.0.3",
+    "nodemon": "^3.1.14",
+    "pg": "^8.20.0",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
+    "sqlite3": "^6.0.1",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^13.0.0",
+    "yamljs": "^0.3.0"
   }
 }

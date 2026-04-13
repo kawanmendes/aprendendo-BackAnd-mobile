@@ -1,5 +1,4 @@
 const e = require('express');
-const { use } = require('react');
 const {V4: uuidv4} = require('uuid');
 
 const waitingQueue = {
@@ -96,7 +95,7 @@ class MatchingService {
             return `${minutes} minutes ${seconds} seconds`;
         }
     }
-    getqueueStatus() {
+    getQueueStats() {
         return {
             games: waitingQueue.games.length,
             series: waitingQueue.series.length,

@@ -17,7 +17,7 @@ router.get('/rooms/:roomId/messages',
 );
 router.post('/rooms/:roomId/messages',
     validate(schemas.message),
-    ChatController.createMessage
+    ChatController.sendMessage
 );
 router.post('/rooms/:roomId/leave',
     ChatController.leaveRoom
